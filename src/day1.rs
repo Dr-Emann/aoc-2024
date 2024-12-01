@@ -36,11 +36,19 @@ impl Day for Day1 {
         let mut remaining_r = &r[..];
         let mut similarity = 0;
         for l in l.iter().copied() {
-            let start = remaining_r.partition_point(|&r| r < l);
+            // Faster to just linear search rather than binary search
+            let start = remaining_r
+                .iter()
+                .position(|&r| r >= l)
+                .unwrap_or(remaining_r.len());
             remaining_r = &remaining_r[start..];
 
-            let count = remaining_r.partition_point(|&r| r == l);
+            let count = remaining_r
+                .iter()
+                .position(|&r| r != l)
+                .unwrap_or(remaining_r.len());
             similarity += l * count as u32;
+
             remaining_r = &remaining_r[count..];
         }
 
