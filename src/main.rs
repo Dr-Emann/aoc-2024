@@ -1,3 +1,5 @@
+use std::fmt;
+
 mod day1;
 mod day2;
 
@@ -22,6 +24,20 @@ struct DayResults {
     timing: Timing,
     part1: String,
     part2: String,
+}
+
+impl fmt::Display for DayResults {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Gen: ({:?})\nPart 1: {} ({:?})\nPart 2: {} ({:?})",
+            self.timing.gen,
+            self.part1,
+            self.timing.part1,
+            self.part2,
+            self.timing.part2
+        )
+    }
 }
 
 #[inline]
@@ -57,5 +73,5 @@ fn run_day<D: Day>(input: &str) -> DayResults {
 fn main() {
     let input = std::fs::read_to_string("input/2024/day2.txt").expect("Failed to read input.txt");
     let results = run_day::<day2::Day2>(&input);
-    println!("Day 2: {:#?}", results);
+    println!("Day 2: {results}");
 }
