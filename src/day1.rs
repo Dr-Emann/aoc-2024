@@ -22,7 +22,7 @@ impl Day for Day1 {
         (l, r)
     }
 
-    fn part1(input: &Self::Parsed<'_>) -> impl Display {
+    fn part1(input: Self::Parsed<'_>) -> impl Display {
         let (l, r) = input;
         let mut total_diff = 0;
         for (&l, &r) in l.iter().zip(r.iter()) {
@@ -55,3 +55,5 @@ impl Day for Day1 {
         similarity
     }
 }
+
+crate::codspeed_def!(Day1);

@@ -40,7 +40,7 @@ impl Day for Day2 {
             .collect()
     }
 
-    fn part1(input: &Self::Parsed<'_>) -> impl Display {
+    fn part1(input: Self::Parsed<'_>) -> impl Display {
         input
             .iter()
             .filter(|&report| is_safe_report(report))
@@ -49,8 +49,8 @@ impl Day for Day2 {
 
     fn part2(input: Self::Parsed<'_>) -> impl Display {
         input
-            .into_iter()
-            .filter(|report| {
+            .iter()
+            .filter(|&report| {
                 if is_safe_report(report) {
                     return true;
                 }
@@ -66,3 +66,5 @@ impl Day for Day2 {
             .count()
     }
 }
+
+crate::codspeed_def!(Day2);
