@@ -75,15 +75,27 @@ const DAYS: &[fn(&str) -> DayResults] = &[
     run_day::<day2::Day2>,
 ];
 
+fn fully_run_day(day_num: usize) -> DayResults {
+    let path = format!("input/2024/day{}.txt", day_num);
+    let input = std::fs::read_to_string(&path).expect("Failed to read path");
+    let results = DAYS[day_num - 1](&input);
+    println!("Day {}: {results}", day_num);
+    results
+}
+
 fn main() {
     let mut total_time = std::time::Duration::ZERO;
-    for (i, day_runner) in DAYS.iter().copied().enumerate() {
-        let path = format!("input/2024/day{}.txt", i + 1);
-        let input = std::fs::read_to_string(&path).expect("Failed to read path");
-        let results = day_runner(&input);
-        println!("Day {}: {results}", i + 1);
+    if let Some(day) = std::env::args().nth(1).and_then(|s| s.parse::<usize>().ok()) {
+        let results = fully_run_day(day);
+        println!();
         total_time += results.timing.gen + results.timing.part1 + results.timing.part2;
+    } else {
+        for i in 0..DAYS.len() {
+            let results = fully_run_day(i + 1);
+            println!();
+            total_time += results.timing.gen + results.timing.part1 + results.timing.part2;
+        }
     }
-    
+
     println!("Total time: {:?}", total_time);
 }
