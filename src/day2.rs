@@ -119,11 +119,6 @@ impl Day for Day2 {
                 // Try omitting the value
                 {
                     let last_value = report[i - 1];
-                    let increasing = if i == 2 {
-                        report[i + 1] > last_value
-                    } else {
-                        increasing
-                    };
                     if first_unsafety(last_value, increasing, &report[i + 1..]).is_none() {
                         return true;
                     }
