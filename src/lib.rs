@@ -2,6 +2,7 @@ use std::fmt;
 
 pub mod day1;
 pub mod day2;
+pub mod day3;
 
 pub trait Day {
     type Parsed<'a>: Clone;
@@ -73,6 +74,7 @@ pub fn run_day<D: Day>(input: &str) -> DayResults {
 pub const DAYS: &[fn(&str) -> DayResults] = &[
     run_day::<day1::Day1>,
     run_day::<day2::Day2>,
+    run_day::<day3::Day3>,
 ];
 
 pub fn fully_run_day(day_num: usize) -> DayResults {
