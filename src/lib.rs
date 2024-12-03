@@ -32,11 +32,7 @@ impl fmt::Display for DayResults {
         write!(
             f,
             "Gen: ({:?})\nPart 1: {} ({:?})\nPart 2: {} ({:?})",
-            self.timing.gen,
-            self.part1,
-            self.timing.part1,
-            self.part2,
-            self.timing.part2
+            self.timing.gen, self.part1, self.timing.part1, self.part2, self.timing.part2
         )
     }
 }
@@ -49,6 +45,7 @@ fn time<O>(f: impl FnOnce() -> O) -> (O, std::time::Duration) {
     (res, elapsed)
 }
 
+#[must_use]
 pub fn run_day<D: Day>(input: &str) -> DayResults {
     let (parsed, gen_time) = time(|| D::generator(input));
 
@@ -77,11 +74,12 @@ pub const DAYS: &[fn(&str) -> DayResults] = &[
     run_day::<day3::Day3>,
 ];
 
+#[must_use]
 pub fn fully_run_day(day_num: usize) -> DayResults {
-    let path = format!("input/2024/day{}.txt", day_num);
+    let path = format!("input/2024/day{day_num}.txt");
     let input = std::fs::read_to_string(&path).expect("Failed to read path");
     let results = DAYS[day_num - 1](&input);
-    println!("Day {}: {results}", day_num);
+    println!("Day {day_num}: {results}");
     results
 }
 
@@ -97,10 +95,12 @@ fn part_2_impl<'a, D: Day + 'a>(input: &'a str) -> impl fmt::Display + 'a {
 
 macro_rules! codspeed_def {
     ($day_ty:ty) => {
+        #[must_use]
         pub fn part1(input: &str) -> impl ::std::fmt::Display + '_ {
             $crate::part_1_impl::<$day_ty>(input)
         }
 
+        #[must_use]
         pub fn part2(input: &str) -> impl ::std::fmt::Display + '_ {
             $crate::part_2_impl::<$day_ty>(input)
         }

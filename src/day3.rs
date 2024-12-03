@@ -18,7 +18,9 @@ impl Day for Day3 {
         let mult_finder = memmem::Finder::new("mul(");
         let mut result = 0;
         for mul_idx in mult_finder.find_iter(input) {
-            if let Some((x, y)) = parse_after_mul(&mut &input[mul_idx + mult_finder.needle().len()..]) {
+            if let Some((x, y)) =
+                parse_after_mul(&mut &input[mul_idx + mult_finder.needle().len()..])
+            {
                 result += x * y;
             }
         }
@@ -36,7 +38,9 @@ impl Day for Day3 {
             let next_dont = dont_finder.find(input).unwrap_or(input.len());
             let (mut inner_input, rest) = (
                 &input[..next_dont],
-                input.get(next_dont + dont_finder.needle().len()..).unwrap_or(&[]),
+                input
+                    .get(next_dont + dont_finder.needle().len()..)
+                    .unwrap_or(&[]),
             );
             while let Some(next_mul) = mult_finder.find(inner_input) {
                 inner_input = &inner_input[next_mul + mult_finder.needle().len()..];
@@ -61,7 +65,7 @@ fn parse_after_mul(input: &mut &[u8]) -> Option<(Int, Int)> {
     for &b in &mut it {
         match b {
             b',' => break,
-            b'0'..=b'9' => x = x * 10 + (b - b'0') as Int,
+            b'0'..=b'9' => x = x * 10 + Int::from(b - b'0'),
             _ => {
                 *input = it.as_slice();
                 return None;
@@ -73,7 +77,7 @@ fn parse_after_mul(input: &mut &[u8]) -> Option<(Int, Int)> {
     for &b in &mut it {
         match b {
             b')' => break,
-            b'0'..=b'9' => y = y * 10 + (b - b'0') as Int,
+            b'0'..=b'9' => y = y * 10 + Int::from(b - b'0'),
             _ => {
                 *input = it.as_slice();
                 return None;

@@ -28,7 +28,7 @@ impl Day for Day1 {
                 }
                 digit => {
                     debug_assert!(digit.is_ascii_digit());
-                    current_val = current_val * 10 + (digit - b'0') as u32;
+                    current_val = current_val * 10 + u32::from(digit - b'0');
                 }
             }
         }
