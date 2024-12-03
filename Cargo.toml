@@ -6,6 +6,8 @@ edition = "2021"
 [dependencies]
 arrayvec = "0.7.6"
 regex = "1.11"
+winnow = "0.6"
+memchr = "2.7"
 
 [profile.release]
 codegen-units = 1

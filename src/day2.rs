@@ -1,7 +1,6 @@
 use crate::Day;
 use arrayvec::ArrayVec;
 use std::fmt::Display;
-use std::ops::RangeBounds;
 
 pub struct Day2;
 
