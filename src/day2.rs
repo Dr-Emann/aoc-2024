@@ -58,6 +58,10 @@ impl Day for Day2 {
                 }
             }
         }
+        if input.as_bytes().last() != Some(&b'\n') {
+            current.push(current_val);
+            dst.push(current);
+        }
         dst
     }
 
