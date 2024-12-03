@@ -73,60 +73,64 @@ impl Day for Day2 {
     }
 
     fn part2(input: Self::Parsed<'_>) -> impl Display {
-        input
-            .iter()
-            .filter(|&report| {
-                let (&[x, y], rest) = report.split_first_chunk().unwrap();
-                if !(1..4).contains(&x.abs_diff(y)) {
-                    let (&z, rest) = rest.split_first().unwrap();
-                    // try omitting x:
-                    {
-                        let increasing = z > y;
-                        if (1..4).contains(&y.abs_diff(z))
-                            && first_unsafety(z, increasing, rest).is_none()
-                        {
-                            return true;
-                        }
-                    }
-                    // try omitting y
-                    {
-                        let increasing = z > x;
-                        if (1..4).contains(&x.abs_diff(z))
-                            && first_unsafety(z, increasing, rest).is_none()
-                        {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-                let increasing = y > x;
-                let Some(i) = first_unsafety(y, increasing, rest) else {
-                    return true;
-                };
-                let i = i + 2;
-                // Try omitting the previous value
-                {
-                    let last_value = report[i - 2];
-                    let increasing = if i == 2 {
-                        report[i] > last_value
-                    } else {
-                        increasing
-                    };
-                    if first_unsafety(last_value, increasing, &report[i..]).is_none() {
-                        return true;
-                    }
-                }
-                // Try omitting the value
-                {
-                    let last_value = report[i - 1];
-                    if first_unsafety(last_value, increasing, &report[i + 1..]).is_none() {
-                        return true;
-                    }
-                }
-                false
-            })
-            .count()
+        input.iter().filter(|&report| can_be_safe(report)).count()
     }
+}
+
+fn can_be_safe(report: &[Int]) -> bool {
+    let (&[x, y], rest) = report.split_first_chunk().unwrap();
+    if !(1..4).contains(&x.abs_diff(y)) {
+        let (&z, rest) = rest.split_first().unwrap();
+        // try omitting x:
+        {
+            let increasing = z > y;
+            if (1..4).contains(&y.abs_diff(z)) && first_unsafety(z, increasing, rest).is_none() {
+                return true;
+            }
+        }
+        // try omitting y
+        {
+            let increasing = z > x;
+            if (1..4).contains(&x.abs_diff(z)) && first_unsafety(z, increasing, rest).is_none() {
+                return true;
+            }
+        }
+        return false;
+    }
+    let increasing = y > x;
+    let Some(i) = first_unsafety(y, increasing, rest) else {
+        return true;
+    };
+    let i = i + 2;
+    // If we get an error at 2, also try removing the first value
+    if i == 2 {
+        let (&z, rest) = rest.split_first().unwrap();
+        let increasing = z > y;
+        if (1..4).contains(&y.abs_diff(z)) && first_unsafety(z, increasing, rest).is_none() {
+            return true;
+        }
+    }
+    // Try omitting the previous value
+    {
+        let last_value = report[i - 2];
+        let increasing = if i == 2 {
+            // Need to recalculate if we're increasing if the previous value is y
+            report[i] > last_value
+        } else {
+            increasing
+        };
+        if first_unsafety(last_value, increasing, &report[i..]).is_none() {
+            return true;
+        }
+    }
+    // Try omitting the value
+    {
+        let last_value = report[i - 1];
+        if first_unsafety(last_value, increasing, &report[i + 1..]).is_none() {
+            return true;
+        }
+    }
+    false
 }
 
 crate::codspeed_def!(Day2);
