@@ -34,15 +34,12 @@ impl Grid<'_> {
             return false;
         }
         let Some(m_offset) = offset.checked_add_signed(dxy) else {
-            debug_assert!(false);
             return false;
         };
         let Some(a_offset) = m_offset.checked_add_signed(dxy) else {
-            debug_assert!(false);
             return false;
         };
         let Some(s_offset) = a_offset.checked_add_signed(dxy) else {
-            debug_assert!(false);
             return false;
         };
         self.data.get(s_offset) == Some(&b'S')

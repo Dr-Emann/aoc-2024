@@ -1,9 +1,12 @@
+extern crate core;
+
 use std::fmt;
 
 pub mod day1;
 pub mod day2;
 pub mod day3;
 pub mod day4;
+pub mod day5;
 
 pub trait Day {
     type Parsed<'a>: Clone;
@@ -74,6 +77,7 @@ pub const DAYS: &[fn(&str) -> DayResults] = &[
     run_day::<day2::Day2>,
     run_day::<day3::Day3>,
     run_day::<day4::Day4>,
+    run_day::<day5::Day5>,
 ];
 
 #[must_use]
