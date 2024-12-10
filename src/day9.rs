@@ -56,18 +56,14 @@ impl Day for Day9 {
     fn part2(input: Self::Parsed<'_>) -> impl Display {
         let mut gap_offsets_by_size: [ArrayVec<Offset, { 1024 * 2 }>; 9] =
             [const { ArrayVec::new_const() }; 9];
-        let mut hash = 0;
         let mut it = input.iter().copied().map(|b| b - b'0');
         let mut end_offset;
         {
             let mut it = it.clone();
             let mut current_offset = 0;
-            let mut current_value = 0;
             loop {
                 let Some(val_len) = it.next() else { break };
-                hash += hash_range(current_value, current_offset, val_len);
                 current_offset += Offset::from(val_len);
-                current_value += 1;
                 let Some(gap) = it.next() else { break };
                 if gap == 0 {
                     continue;
@@ -81,6 +77,7 @@ impl Day for Day9 {
             }
         }
 
+        let mut hash = 0;
         let mut end_value = (input.len() / 2) as Int;
         loop {
             let Some(end_len) = it.next_back() else { break };
@@ -96,11 +93,9 @@ impl Day for Day9 {
                 .skip(usize::from(end_len - 1))
                 .filter(|(_, gap_offsets)| gap_offsets.last().map_or(false, |&x| x < end_offset))
                 .min_by_key(|(_, gap_offsets)| gap_offsets.last().copied().unwrap_or(Offset::MAX));
+            let mut new_offset = end_offset;
             if let Some((new_gap_len, min_gap_offset)) = result {
-                let new_offset = min_gap_offset.pop().unwrap();
-                hash -= hash_range(end_value, end_offset, end_len);
-                hash += hash_range(end_value, new_offset, end_len);
-
+                new_offset = min_gap_offset.pop().unwrap();
                 let remaining_gap = new_gap_len - end_len;
                 if remaining_gap > 0 {
                     let gap_offsets = &mut gap_offsets_by_size[usize::from(remaining_gap - 1)];
@@ -110,6 +105,7 @@ impl Day for Day9 {
                     gap_offsets.insert(to_insert_at, new_offset);
                 }
             }
+            hash += hash_range(end_value, new_offset, end_len);
 
             let Some(end_gap) = it.next_back() else { break };
             end_value -= 1;
