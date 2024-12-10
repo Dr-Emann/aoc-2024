@@ -8,6 +8,7 @@ pub mod day3;
 pub mod day4;
 pub mod day5;
 pub mod day6;
+pub mod day9;
 
 pub trait Day {
     type Parsed<'a>: Clone;
@@ -82,6 +83,7 @@ pub const DAYS: &[fn(&str) -> DayResults] = &[
     run_day::<day6::Day6>,
     run_day::<UnimplementedDay>,
     run_day::<UnimplementedDay>,
+    run_day::<day9::Day9>,
 ];
 
 struct UnimplementedDay;
