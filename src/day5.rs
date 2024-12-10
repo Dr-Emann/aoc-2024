@@ -9,8 +9,7 @@ type Int = u8;
 type BitsetWord = u64;
 // TODO: Try using Int::MAX to avoid bounds checks
 const MAX_INT: Int = 99;
-const BITSET_LEN_WORDS: usize =
-    (MAX_INT as usize + BitsetWord::BITS as usize) / BitsetWord::BITS as usize;
+const BITSET_LEN_WORDS: usize = (MAX_INT as usize + 1).div_ceil(BitsetWord::BITS as usize);
 const MAX_UPDATE_SIZE: usize = 64;
 
 #[derive(Copy, Clone, PartialEq, Eq)]

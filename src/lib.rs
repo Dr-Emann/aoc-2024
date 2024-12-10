@@ -7,6 +7,7 @@ pub mod day2;
 pub mod day3;
 pub mod day4;
 pub mod day5;
+pub mod day6;
 
 pub trait Day {
     type Parsed<'a>: Clone;
@@ -78,7 +79,28 @@ pub const DAYS: &[fn(&str) -> DayResults] = &[
     run_day::<day3::Day3>,
     run_day::<day4::Day4>,
     run_day::<day5::Day5>,
+    run_day::<day6::Day6>,
+    run_day::<UnimplementedDay>,
+    run_day::<UnimplementedDay>,
 ];
+
+struct UnimplementedDay;
+
+impl Day for UnimplementedDay {
+    type Parsed<'a> = ();
+
+    fn generator(_input: &str) -> Self::Parsed<'_> {
+        ()
+    }
+
+    fn part1(_input: Self::Parsed<'_>) -> impl fmt::Display {
+        "Unimplemented"
+    }
+
+    fn part2(_input: Self::Parsed<'_>) -> impl fmt::Display {
+        "Unimplemented"
+    }
+}
 
 #[must_use]
 pub fn fully_run_day(day_num: usize) -> DayResults {
